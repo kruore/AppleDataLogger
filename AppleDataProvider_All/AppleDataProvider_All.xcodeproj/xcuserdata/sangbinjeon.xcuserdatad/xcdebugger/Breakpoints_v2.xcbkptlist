@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "1B3E5489-97FA-4A0F-823D-595A4CC287C1"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "89362B0D-422B-4BDE-A298-EFA9452ECBAF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AppleDataProvider_All WatchKit Extension/InterfaceController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "UpdateDatas()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "89362B0D-422B-4BDE-A298-EFA9452ECBAF - 748e400d6f17218a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.Optional&lt;__C.CMAccelerometerData&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 () -&gt; () in AppleDataProvider_All_WatchKit_Extension.InterfaceController.UpdateDatas() -&gt; ()"
+                  moduleName = "AppleDataProvider_All WatchKit Extension"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sangbinjeon/GitHub_K/KINL_AppleDataProvider/AppleDataProvider_All/AppleDataProvider_All%20WatchKit%20Extension/InterfaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "204">
+               </Location>
+               <Location
+                  uuid = "89362B0D-422B-4BDE-A298-EFA9452ECBAF - 748e400d6f17218a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.Optional&lt;__C.CMAccelerometerData&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 () -&gt; () in AppleDataProvider_All_WatchKit_Extension.InterfaceController.UpdateDatas() -&gt; ()"
+                  moduleName = "AppleDataProvider_All WatchKit Extension"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sangbinjeon/GitHub_K/KINL_AppleDataProvider/AppleDataProvider_All/AppleDataProvider_All%20WatchKit%20Extension/InterfaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "244">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
