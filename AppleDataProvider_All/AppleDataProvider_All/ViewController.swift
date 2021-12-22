@@ -12,23 +12,24 @@ import os.log
 import WatchConnectivity
 import HealthKit
 
+
 class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMotionManagerDelegate, WCSessionDelegate {
     
-    
+
     var mTimer : Timer?
-    
+
     func testMain(){
             print("")
             print("===============================")
             print("[Program Start]")
             print("===============================")
             print("")
-            
+
             // 실시간 반복 작업 시작 실시
             startTimer()
         }
-        
-        
+
+
         // [실시간 반복 작업 시작 호출]
         var timer : Timer?
         func startTimer(){
@@ -45,18 +46,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             print("")
             print("===============================")
             print("[timerCallback : run]")
-            print("[intCount : ")
+            print("[intCount : \(heartRate_int)")
             print("===============================")
             print("")
-            getSamples()
-            latestHeartRate()
+            self.heartrate.text = heartRate_int
             // [처리할 로직 작성 실시]
 //            displayText.text = String(intCount) // UI 카운트 값 표시 실시
 //            intCount += 1 // 1씩 카운트 값 증가 실시
 //            if intCount > 5 { // 카운트 값이 5인 경우
 //                stopTimer() // 타이머 종료 실시
 //                showAlert(tittle: "카운트 알림", content: "타이머 종료", okBtb: "확인", noBtn: "") // 팝업창 호출
-            
+
         }
         // [실시간 반복 작업 정지 호출]
         func stopTimer(){
@@ -70,80 +70,81 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 timer!.invalidate()
             }
         }
-
-    
-    func getSamples() {
-
-        let heathStore = HKHealthStore()
-
-        let heartrate = HKQuantityType.quantityType(forIdentifier: .heartRate)
-        let sort: [NSSortDescriptor] = [
-            .init(key: HKSampleSortIdentifierStartDate, ascending: false)
-        ]
-
-        let sampleQuery = HKSampleQuery(sampleType: heartrate!, predicate: nil, limit: 1, sortDescriptors: sort, resultsHandler: resultsHandler)
-
-        heathStore.execute(sampleQuery)
-    }
-
-    func resultsHandler(query: HKSampleQuery, results: [HKSample]?, error: Error?) {
-
-        guard error == nil else {
-            print("cant read heartRate data", error!)
-            return
-        }
-        guard let sample = results?.first as? HKQuantitySample else { return }
-        // let heartRateUnit: HKUnit = .init(from: "count/min")
-        // let doubleValue = sample.quantity.doubleValue(for: heartRateUnit)
-        print("heart rate is", sample)
-    }
-
-    let healthStore = HKHealthStore()
-    
-    func authorizeHealthKit()
-    {
-        let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-        let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-
-        healthStore.requestAuthorization(toShare: share, read: read) { chk, error in
-            if(chk)
-            {
-                print("Permission granted")
-                self.latestHeartRate()
-            }
-        }
-    }
-
-    func latestHeartRate()
-    {
-
-        guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else
-        {
-            return
-        }
-        let startData = Calendar.current.date(byAdding: .month, value: -1, to: Date())
-
-        let predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: .strictEndDate)
-        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-
-
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]){(sample, result, error) in guard error == nil else{
-            return
-        }
-            let data = result![0] as! HKQuantitySample
-            let unit = HKUnit(from: "count/min")
-            let latestHr = data.quantity.doubleValue(for: unit)
-            self.rate = String(latestHr)
-            print("Latest hr\(latestHr) BPM")
-            print(latestHr)
-        }
-
-        healthStore.execute(query)
-
-    }
-    var rate = ""
+//
+//
+//    func getSamples() {
+//
+//        let heathStore = HKHealthStore()
+//
+//        let heartrate = HKQuantityType.quantityType(forIdentifier: .heartRate)
+//        let sort: [NSSortDescriptor] = [
+//            .init(key: HKSampleSortIdentifierStartDate, ascending: false)
+//        ]
+//
+//        let sampleQuery = HKSampleQuery(sampleType: heartrate!, predicate: nil, limit: 1, sortDescriptors: sort, resultsHandler: resultsHandler)
+//
+//        heathStore.execute(sampleQuery)
+//    }
+//
+//    func resultsHandler(query: HKSampleQuery, results: [HKSample]?, error: Error?) {
+//
+//        guard error == nil else {
+//            print("cant read heartRate data", error!)
+//            return
+//        }
+//        guard let sample = results?.first as? HKQuantitySample else { return }
+//        // let heartRateUnit: HKUnit = .init(from: "count/min")
+//        // let doubleValue = sample.quantity.doubleValue(for: heartRateUnit)
+//        print("heart rate is", sample)
+//    }
+//
+//    let healthStore = HKHealthStore()
+//
+//    func authorizeHealthKit()
+//    {
+//        let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+//        let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+//
+//        healthStore.requestAuthorization(toShare: share, read: read) { chk, error in
+//            if(chk)
+//            {
+//                print("Permission granted")
+//                self.latestHeartRate()
+//            }
+//        }
+//    }
+//
+//    func latestHeartRate()
+//    {
+//
+//        guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else
+//        {
+//            return
+//        }
+//        let startData = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+//
+//        let predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: .strictEndDate)
+//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+//
+//
+//        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]){(sample, result, error) in guard error == nil else{
+//            return
+//        }
+//            let data = result![0] as! HKQuantitySample
+//            let unit = HKUnit(from: "count/min")
+//            let latestHr = data.quantity.doubleValue(for: unit)
+//            self.rate = String(latestHr)
+//            print("Latest hr\(latestHr) BPM")
+//            print(latestHr)
+//        }
+//
+//        healthStore.execute(query)
+//
+//    }
+//    var rate = ""
     //APK(Watch)
     var strarr: Array<String> = Array()
+    var heartRate_int = ""
     
     //APK(Airpot)
     let APP_airpot = CMHeadphoneMotionManager()
@@ -239,8 +240,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             statusLabel.text = interfaceIntTime(second: secondCounter)
         }
     }
-    let mulSecondToNanoSecond: Double = 1000000000
-    
+    //let mulSecondToNanoSecond: Double = 1000000000
+    let mulSecondToNanoSecond: Double = 1000
     
     // text file input & output
     var fileHandlers = [FileHandle]()
@@ -255,8 +256,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         session.delegate=self
         session.activate()
                     
-        startTimer()
-        heartrate.text = rate
+      
+        //heartrate.text = rate
         
         // default device setting
         statusLabel.text = "Ready"
@@ -279,6 +280,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             self.startAltimeterUpdate()
             self.startBatteryLevelUpdate()
         }
+        startTimer()
         
         APP_airpot.delegate = self
 
@@ -287,15 +289,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             guard let motion = motion, error == nil else { return }
             self?.updateLabel_Airpot(motion)
         })
-        
     }
     
-
     override func viewWillDisappear(_ animated: Bool) {
         locationManager.stopUpdatingLocation()
         customQueue.sync {
             stopIMUUpdate()
+           
         }
+        stopTimer()
         pedoMeter.stopUpdates()
         altimeter.stopRelativeAltitudeUpdates()
     }
@@ -393,23 +395,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     }
     func session(_ session:WCSession,didReceiveMessage message:[String:Any])
     {
-//            if let value=message["watch"] as? String{
-//                vectorvalue=value
-//                strarr.append(value)
-//                updateLabel_Watch()
-//            }
-        if let value=message["watchGyro"] as? String{
-        print("GYRO")
+        if let value=message["watch"] as? String{
+            vectorvalue=value
+            strarr.append(value)
+            updateLabel_Watch()
         }
-        
+//        if let watchgyro = message["watchGyro"] as? String{
+//            print("Gyro : "  + watchgyro)
+//        }
+//        if let watchacc = message["watchAcc"] as? String{
+//            print("Acc : " + watchacc)
+//        }
         APP_airpot.delegate = self
-
+        
         guard APP_airpot.isDeviceMotionAvailable else { return }
         APP_airpot.startDeviceMotionUpdates(to: OperationQueue.current!, withHandler: {[weak self] motion, error  in
             guard let motion = motion, error == nil else { return }
             self?.updateLabel_Airpot(motion)
         })
-
+        
         
     }
     func updateLabel_Watch()
@@ -486,7 +490,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         // optional binding for safety
         if let latestLocation = manager.location {
-            let timestamp = latestLocation.timestamp.timeIntervalSince1970 * self.mulSecondToNanoSecond
+         //   let timestamp = latestLocation.timestamp.timeIntervalSince1970 * self.mulSecondToNanoSecond
+            let timestamp = Date().timeIntervalSince1970
             let latitude = latestLocation.coordinate.latitude
             let longitude = latestLocation.coordinate.longitude
             let horizontalAccuracy = latestLocation.horizontalAccuracy
@@ -535,6 +540,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     // define startIMUUpdate() function
     private func startIMUUpdate() {
         
+        
         // define IMU update interval up to 200 Hz (in real, iOS can only support up to 100 Hz)
         motionManager.deviceMotionUpdateInterval = 1.0 / sampleFrequency
         motionManager.showsDeviceMovementDisplay = true
@@ -544,13 +550,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         
         // 1) update device motion
-        if (!motionManager.isDeviceMotionActive) {
+        if (!motionManager.isDeviceMotionActive)
+        {
             motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main) { (motion: CMDeviceMotion?, error: Error?) in
                 
                 // optional binding for safety
                 if let deviceMotion = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                    let timestamp = deviceMotion.timestamp * self.mulSecondToNanoSecond
+                    //let timestamp = deviceMotion.timestamp * self.mulSecondToNanoSecond
+                    let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
                     let deviceOrientationRx = deviceMotion.attitude.pitch
                     let deviceOrientationRy = deviceMotion.attitude.roll
                     let deviceOrientationRz = deviceMotion.attitude.yaw
@@ -587,6 +595,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         self.mxLabel.text = String(format:"%.3f", magneticFieldX)
                         self.myLabel.text = String(format:"%.3f", magneticFieldY)
                         self.mzLabel.text = String(format:"%.3f", magneticFieldZ)
+                
                     }
                     
                     // custom queue to save IMU text data
@@ -677,7 +686,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // optional binding for safety
                 if let accelerometerData = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                    let timestamp = accelerometerData.timestamp * self.mulSecondToNanoSecond
+                    //let timestamp = accelerometerData.timestamp * self.mulSecondToNanoSecond
+                    let timestamp = Date().timeIntervalSince1970
                     let rawAccelDataX = accelerometerData.acceleration.x * self.gravity
                     let rawAccelDataY = accelerometerData.acceleration.y * self.gravity
                     let rawAccelDataZ = accelerometerData.acceleration.z * self.gravity
@@ -716,7 +726,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // optional binding for safety
                 if let gyroData = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                    let timestamp = gyroData.timestamp * self.mulSecondToNanoSecond
+                   // let timestamp = gyroData.timestamp * self.mulSecondToNanoSecond
+                    let timestamp = Date().timeIntervalSince1970
                     let rawGyroDataX = gyroData.rotationRate.x
                     let rawGyroDataY = gyroData.rotationRate.y
                     let rawGyroDataZ = gyroData.rotationRate.z
@@ -755,7 +766,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // optional binding for safety
                 if let magnetometerData = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                    let timestamp = magnetometerData.timestamp * self.mulSecondToNanoSecond
+                   // let timestamp = magnetometerData.timestamp * self.mulSecondToNanoSecond
+                    let timestamp = Date().timeIntervalSince1970
                     let rawMagnetDataX = magnetometerData.magneticField.x
                     let rawMagnetDataY = magnetometerData.magneticField.y
                     let rawMagnetDataZ = magnetometerData.magneticField.z
@@ -796,7 +808,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 
                 // optional binding for safety
                 if let pedometerData = motion {
-                    let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
+                    let timestamp = Date().timeIntervalSince1970
                     let stepCounter = pedometerData.numberOfSteps.intValue
                     var distance: Double = -100
                     if let temp = pedometerData.distance {

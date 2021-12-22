@@ -11,14 +11,17 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="AppleDataProvider_All_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <label width="126" height="74" alignment="left" text="Label" id="Ezm-gq-zkd"/>
+                        <label alignment="left" text="heartRate" id="PBm-4n-3Td"/>
+                        <label width="126" height="74" alignment="left" text="Data" id="Ezm-gq-zkd"/>
                         <button width="1" alignment="left" title="Button" id="wL1-QX-eNR">
                             <connections>
-                                <action selector="UpdateButtonPress" destination="AgC-eL-Hgc" id="hrp-0J-5bG"/>
+                                <action selector="didTapButton" destination="AgC-eL-Hgc" id="frD-Pe-dU1"/>
                             </connections>
                         </button>
                     </items>
                     <connections>
+                        <outlet property="heartRate" destination="PBm-4n-3Td" id="94I-3n-FXl"/>
+                        <outlet property="startButton" destination="wL1-QX-eNR" id="Usn-RT-NUm"/>
                         <outlet property="stringlabel" destination="Ezm-gq-zkd" id="mad-DU-Lsx"/>
                     </connections>
                 </controller>
