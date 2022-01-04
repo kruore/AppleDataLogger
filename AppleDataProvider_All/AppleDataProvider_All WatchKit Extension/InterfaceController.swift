@@ -181,5 +181,6 @@ extension InterfaceController: WorkoutManagerDelegate {
         // Update heart rate label.
         heartRate.setText(String(format: "%.0f", newHeartRate.bpm))
         self.heartbit =  String(format: "%.0f", newHeartRate.bpm)
+        print("SEDF")
     }
 }
