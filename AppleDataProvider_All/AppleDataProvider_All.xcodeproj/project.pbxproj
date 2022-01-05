@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF32A0FF27845696002C483D /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF32A0FE27845696002C483D /* InterfaceController.swift */; };
 		DF47098E2771A39700659F05 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF47098D2771A39700659F05 /* HealthKit.framework */; };
 		DF4709912771A3A800659F05 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4709902771A3A800659F05 /* HealthKit.framework */; };
 		DF4709932771B3ED00659F05 /* HeartRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4709922771B3ED00659F05 /* HeartRate.swift */; };
@@ -25,7 +26,6 @@
 		DFDBF5D9277065DB002C10E3 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFDBF5D7277065DB002C10E3 /* Interface.storyboard */; };
 		DFDBF5DB277065DC002C10E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFDBF5DA277065DC002C10E3 /* Assets.xcassets */; };
 		DFDBF5E1277065DD002C10E3 /* AppleDataProvider_All WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DFDBF5E0277065DD002C10E3 /* AppleDataProvider_All WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DFDBF5E6277065DD002C10E3 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBF5E5277065DD002C10E3 /* InterfaceController.swift */; };
 		DFDBF5E8277065DD002C10E3 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBF5E7277065DD002C10E3 /* ExtensionDelegate.swift */; };
 		DFDBF5EA277065DD002C10E3 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBF5E9277065DD002C10E3 /* NotificationController.swift */; };
 		DFDBF5EC277065DD002C10E3 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDBF5EB277065DD002C10E3 /* ComplicationController.swift */; };
@@ -75,6 +75,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DF32A0FE27845696002C483D /* InterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		DF47098B2771A39600659F05 /* AppleDataProvider_All.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppleDataProvider_All.entitlements; sourceTree = "<group>"; };
 		DF47098D2771A39700659F05 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		DF47098F2771A3A800659F05 /* AppleDataProvider_All WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AppleDataProvider_All WatchKit Extension.entitlements"; sourceTree = "<group>"; };
@@ -97,7 +98,6 @@
 		DFDBF5D8277065DB002C10E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		DFDBF5DA277065DC002C10E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DFDBF5E0277065DD002C10E3 /* AppleDataProvider_All WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AppleDataProvider_All WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DFDBF5E5277065DD002C10E3 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		DFDBF5E7277065DD002C10E3 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		DFDBF5E9277065DD002C10E3 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		DFDBF5EB277065DD002C10E3 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -126,6 +126,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF32A0B427844C34002C483D /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
+		DF32A100278457C0002C483D /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				DFDBF5D7277065DB002C10E3 /* Interface.storyboard */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		DF47098C2771A39700659F05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,7 +190,7 @@
 		DFDBF5D6277065DB002C10E3 /* AppleDataProvider_All WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
-				DFDBF5D7277065DB002C10E3 /* Interface.storyboard */,
+				DF32A100278457C0002C483D /* New Group */,
 				DFDBF5DA277065DC002C10E3 /* Assets.xcassets */,
 			);
 			path = "AppleDataProvider_All WatchKit App";
@@ -184,8 +199,9 @@
 		DFDBF5E4277065DD002C10E3 /* AppleDataProvider_All WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				DF32A0FE27845696002C483D /* InterfaceController.swift */,
+				DF32A0B427844C34002C483D /* New Group */,
 				DF47098F2771A3A800659F05 /* AppleDataProvider_All WatchKit Extension.entitlements */,
-				DFDBF5E5277065DD002C10E3 /* InterfaceController.swift */,
 				DFDBF5E7277065DD002C10E3 /* ExtensionDelegate.swift */,
 				DFDBF5E9277065DD002C10E3 /* NotificationController.swift */,
 				DFDBF5EB277065DD002C10E3 /* ComplicationController.swift */,
@@ -350,9 +366,9 @@
 				DF56E2AC2772EDAD009C3D3B /* HeartRate.swift in Sources */,
 				DFDBF5EC277065DD002C10E3 /* ComplicationController.swift in Sources */,
 				DFDBF5E8277065DD002C10E3 /* ExtensionDelegate.swift in Sources */,
+				DF32A0FF27845696002C483D /* InterfaceController.swift in Sources */,
 				DF56E2A82772ED4E009C3D3B /* HeartRateManager.swift in Sources */,
 				DF56E2AA2772ED84009C3D3B /* AuthorizatonManager.swift in Sources */,
-				DFDBF5E6277065DD002C10E3 /* InterfaceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,15 +531,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "AppleDataProvider_All WatchKit Extension/AppleDataProvider_All WatchKit Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AppleDataProvider_All WatchKit Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "AppleDataProvider_All WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = AppleDataProvider_All_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_LSApplicationCategoryType = "Bundle display name";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "healthKit will be tracked your HeartRate";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_WKExtensionDelegateClassName = "$(PRODUCT_MODULE_NAME).ExtensionDelegate";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = AppleDataProvider_All_WatchKit_Extension.ExtensionDelegate;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -533,6 +554,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -547,15 +569,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "AppleDataProvider_All WatchKit Extension/AppleDataProvider_All WatchKit Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AppleDataProvider_All WatchKit Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "AppleDataProvider_All WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = AppleDataProvider_All_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_LSApplicationCategoryType = "Bundle display name";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "healthKit will be tracked your HeartRate";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_WKExtensionDelegateClassName = "$(PRODUCT_MODULE_NAME).ExtensionDelegate";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = AppleDataProvider_All_WatchKit_Extension.ExtensionDelegate;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -565,6 +592,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -581,6 +609,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
@@ -592,6 +621,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -607,6 +637,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
@@ -618,6 +649,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -634,14 +666,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppleDataProvider_All/AppleDataProvider_All.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppleDataProvider_All/Info.plist;
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Your HeartRate";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your HeartRate";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Your HeartRate";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "healthKit will be tracked your HeartRate";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need were you are";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need location";
 				INFOPLIST_KEY_NSLocationUsageDescription = "We need location";
@@ -660,6 +693,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -673,14 +707,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AppleDataProvider_All/AppleDataProvider_All.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DW243YU9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppleDataProvider_All/Info.plist;
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Your HeartRate";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Your HeartRate";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Your HeartRate";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "healthKit will be tracked your HeartRate";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "healthKit will be tracked your HeartRate";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need were you are";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need location";
 				INFOPLIST_KEY_NSLocationUsageDescription = "We need location";
@@ -699,6 +734,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "LSJ.AppleDataProvider-All";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

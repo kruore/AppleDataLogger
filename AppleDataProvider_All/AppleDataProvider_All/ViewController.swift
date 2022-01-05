@@ -72,76 +72,75 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         }
 //
 //
-//    func getSamples() {
-//
-//        let heathStore = HKHealthStore()
-//
-//        let heartrate = HKQuantityType.quantityType(forIdentifier: .heartRate)
-//        let sort: [NSSortDescriptor] = [
-//            .init(key: HKSampleSortIdentifierStartDate, ascending: false)
-//        ]
-//
-//        let sampleQuery = HKSampleQuery(sampleType: heartrate!, predicate: nil, limit: 1, sortDescriptors: sort, resultsHandler: resultsHandler)
-//
-//        heathStore.execute(sampleQuery)
-//    }
-//
-//    func resultsHandler(query: HKSampleQuery, results: [HKSample]?, error: Error?) {
-//
-//        guard error == nil else {
-//            print("cant read heartRate data", error!)
-//            return
-//        }
-//        guard let sample = results?.first as? HKQuantitySample else { return }
-//        // let heartRateUnit: HKUnit = .init(from: "count/min")
-//        // let doubleValue = sample.quantity.doubleValue(for: heartRateUnit)
-//        print("heart rate is", sample)
-//    }
-//
-//    let healthStore = HKHealthStore()
-//
-//    func authorizeHealthKit()
-//    {
-//        let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-//        let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-//
-//        healthStore.requestAuthorization(toShare: share, read: read) { chk, error in
-//            if(chk)
-//            {
-//                print("Permission granted")
-//                self.latestHeartRate()
-//            }
-//        }
-//    }
-//
-//    func latestHeartRate()
-//    {
-//
-//        guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else
-//        {
-//            return
-//        }
-//        let startData = Calendar.current.date(byAdding: .month, value: -1, to: Date())
-//
-//        let predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: .strictEndDate)
-//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-//
-//
-//        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]){(sample, result, error) in guard error == nil else{
-//            return
-//        }
-//            let data = result![0] as! HKQuantitySample
-//            let unit = HKUnit(from: "count/min")
-//            let latestHr = data.quantity.doubleValue(for: unit)
-//            self.rate = String(latestHr)
-//            print("Latest hr\(latestHr) BPM")
-//            print(latestHr)
-//        }
-//
-//        healthStore.execute(query)
-//
-//    }
-//    var rate = ""
+    func getSamples() {
+
+        let heathStore = HKHealthStore()
+
+        let heartrate = HKQuantityType.quantityType(forIdentifier: .heartRate)
+        let sort: [NSSortDescriptor] = [
+            .init(key: HKSampleSortIdentifierStartDate, ascending: false)
+        ]
+
+        let sampleQuery = HKSampleQuery(sampleType: heartrate!, predicate: nil, limit: 1, sortDescriptors: sort, resultsHandler: resultsHandler)
+
+        heathStore.execute(sampleQuery)
+    }
+
+    func resultsHandler(query: HKSampleQuery, results: [HKSample]?, error: Error?) {
+        guard error == nil else {
+            print("cant read heartRate data", error!)
+            return
+        }
+        guard let sample = results?.first as? HKQuantitySample else { return }
+        // let heartRateUnit: HKUnit = .init(from: "count/min")
+        // let doubleValue = sample.quantity.doubleValue(for: heartRateUnit)
+        print("heart rate is", sample)
+    }
+
+    let healthStore = HKHealthStore()
+
+    func authorizeHealthKit()
+    {
+        let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+        let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+
+        healthStore.requestAuthorization(toShare: share, read: read) { chk, error in
+            if(chk)
+            {
+                print("Permission granted")
+                self.latestHeartRate()
+            }
+        }
+    }
+
+    func latestHeartRate()
+    {
+
+        guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else
+        {
+            return
+        }
+        let startData = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+
+        let predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: .strictEndDate)
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+
+
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]){(sample, result, error) in guard error == nil else{
+            return
+        }
+            let data = result![0] as! HKQuantitySample
+            let unit = HKUnit(from: "count/min")
+            let latestHr = data.quantity.doubleValue(for: unit)
+            self.rate = String(latestHr)
+            print("Latest hr\(latestHr) BPM")
+            print(latestHr)
+        }
+
+        healthStore.execute(query)
+
+    }
+    var rate = ""
     //APK(Watch)
     var strarr: Array<String> = Array()
     var heartRate_int = ""
@@ -246,7 +245,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     // text file input & output
     var fileHandlers = [FileHandle]()
     var fileURLs = [URL]()
-    var fileNames: [String] = ["gyro.txt", "gyro_uncalib.txt", "acce.txt", "linacce.txt", "gravity.txt", "magnet.txt", "magnet_uncalib.txt", "game_rv.txt", "gps.txt", "step.txt", "heading.txt", "height.txt", "pressure.txt", "battery.txt", "airpot.txt", "watch.text"]
+    let DeviceInfo = UIDevice.current.name
+    
+    let now = Date()
+    
+    var fileNames: [String] = ["gyro.txt",
+                               "gyro_uncalib.txt",
+                               "acce.txt",
+                               "linacce.txt",
+                               "gravity.txt",
+                               "magnet.txt",
+                               "magnet_uncalib.txt",
+                               "game_rv.txt",
+                               "gps.txt",
+                               "step.txt",
+                               "heading.txt",
+                               "height.txt",
+                               "pressure.txt",
+                               "battery.txt",
+                               "airpot.txt",
+                               "watch.text"]
     
     
     override func viewDidLoad() {
@@ -255,6 +273,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         session.delegate=self
         session.activate()
+        
+        
+   
                     
       
         //heartrate.text = rate
@@ -418,14 +439,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     }
     func updateLabel_Watch()
     {
+        let line = self.vectorvalue
+        let seperator = line.components(separatedBy: ",")
         DispatchQueue.main.async
         {
-            self.watchAccx.text = self.vectorvalue
-            self.watchAccy.text = self.vectorvalue
-            self.watchAccz.text = self.vectorvalue
-            self.watchGyrox.text = self.vectorvalue
-            self.watchGyroy.text = self.vectorvalue
-            self.watchGyroz.text = self.vectorvalue
+
+            self.watchAccx.text = seperator[1]
+            self.watchAccy.text = seperator[2]
+            self.watchAccz.text = seperator[3]
+            self.watchGyrox.text = seperator[4]
+            self.watchGyroy.text = seperator[5]
+            self.watchGyroz.text = seperator[6]
+            self.heartrate.text = seperator[7]
+            print(self.vectorvalue)
+        }
+        // custom queue to save GPS location data
+        self.customQueue.async {
+            if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
+                let watchData = ("\(seperator[0]),\(seperator[1]),\(seperator[2]),\(seperator[3]),\(seperator[4]),\(seperator[5]),\(seperator[6]),\(seperator[7])")
+                if let locationDataToWrite = watchData.data(using: .utf8) {
+                    self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
+                } else {
+                    os_log("Failed to write data record", log: OSLog.default, type: .fault)
+                }
+            }
         }
     }
     
@@ -474,14 +511,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
         
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
-        
-        count+=1
-        print(string)
-        strarr_airpot.append(string)
-       // self.strarr_airpot.text = string
-        if(count % 100 == 0){
-            timestampArray.append(data.timestamp)
-            print(timestampArray)
+        let timestamp = Date().timeIntervalSince1970
+        // custom queue to save GPS location data
+        self.customQueue.async {
+            if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
+                let airpotData = String(format: "%.3f %.3f %.3f %.3f %.3f %.3f %.3f \n",
+                                          timestamp,
+                                        data.gravity.x,
+                                        data.gravity.y,
+                                        data.gravity.z,
+                                        data.userAcceleration.x,
+                                        data.userAcceleration.y,
+                                        data.userAcceleration.z
+                                         )
+                if let locationDataToWrite = airpotData.data(using: .utf8) {
+                    self.fileHandlers[self.AIRPOT_TXT].write(locationDataToWrite)
+                } else {
+                    os_log("Failed to write data record", log: OSLog.default, type: .fault)
+                }
+            }
         }
     }
     
@@ -947,10 +995,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.fileURLs.removeAll()
         
         // create each GPS/IMU sensor text files
+        let now = Date()
+
+        let date = DateFormatter()
+        date.locale = Locale(identifier: "ko_kr")
+        date.timeZone = TimeZone(abbreviation: "KST") // "2018-03-21 18:07:27"
+        //date.timeZone = TimeZone(abbreviation: "NZST") // "2018-03-21 22:06:39"
+        date.dateFormat = "yyyyMMdd HHmmss"
+
+        let krs = date.string(from: now)
+        
         let startHeader = ""
         for i in 0...(self.numSensor - 1) {
             var url = URL(fileURLWithPath: NSTemporaryDirectory())
-            url.appendPathComponent(fileNames[i])
+            url.appendPathComponent(krs+UIDevice.current.name+fileNames[i])
             self.fileURLs.append(url)
             
             // delete previous text files

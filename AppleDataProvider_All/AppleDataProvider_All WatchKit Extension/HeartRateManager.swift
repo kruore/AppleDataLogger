@@ -5,7 +5,6 @@
 //  Created by SangBin Jeon on 2021/12/22.
 //
 
-
 import HealthKit
 
 typealias HKQueryUpdateHandler = ((HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Swift.Void)
@@ -18,6 +17,7 @@ protocol HeartRateManagerDelegate: class {
 
 class HeartRateManager {
 
+    // MARK: - Properties
 
     private let healthStore = HKHealthStore()
 
@@ -25,13 +25,19 @@ class HeartRateManager {
 
     private var activeQueries = [HKQuery]()
 
+    // MARK: - Initialization
+
     init() {
+        
+        print("GEEEE")
         // Request authorization to read heart rate data.
-        AuthorizationManager.requestAuthorization { (success) in
+        AuthorizationManager.requestAuthorization { () in
             // TODO: Export error.
-            print(success)
+            print("permissioned")
         }
     }
+
+    // MARK: - Public API
 
     func start() {
         // Configure heart rate quantity type.
@@ -66,6 +72,8 @@ class HeartRateManager {
         activeQueries.removeAll()
     }
 
+    // MARK: - Process
+
     private func process(samples: [HKQuantitySample]) {
         // Process every single sample.
         samples.forEach { process(sample: $0) }
@@ -90,4 +98,6 @@ class HeartRateManager {
         let newHeartRate = HeartRate(timestamp: timestamp, bpm: count)
         delegate?.heartRate(didChangeTo: newHeartRate)
     }
+
+
 }

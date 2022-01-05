@@ -4,8 +4,6 @@
 //
 //  Created by SangBin Jeon on 2021/12/22.
 //
-
-
 import HealthKit
 
 enum WorkoutState {
@@ -19,7 +17,6 @@ extension WorkoutState {
     func actionText() -> String {
         switch self {
         case .started:
-            
             return "Stop"
         case .stopped:
             return "Start"
@@ -37,6 +34,8 @@ protocol WorkoutManagerDelegate: class {
 
 class WorkoutManager: NSObject {
 
+    // MARK: - Properties
+
     private let healthStore = HKHealthStore()
     fileprivate let heartRateManager = HeartRateManager()
 
@@ -46,6 +45,8 @@ class WorkoutManager: NSObject {
 
     private var session: HKWorkoutSession?
 
+    // MARK: - Initialization
+
     override init() {
         super.init()
 
@@ -53,6 +54,7 @@ class WorkoutManager: NSObject {
         heartRateManager.delegate = self
     }
 
+    // MARK: - Public API
 
     func start() {
         // If we have already started the workout, then do nothing.

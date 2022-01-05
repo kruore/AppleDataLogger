@@ -9,6 +9,8 @@ import WatchKit
 import Foundation
 import CoreMotion
 import WatchConnectivity
+import HealthKit
+import UIKit
 
 class InterfaceController: WKInterfaceController,WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -18,19 +20,19 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
     {
     }
     
-    @IBOutlet weak var stringlabel: WKInterfaceLabel!
+    @IBOutlet weak var gyroslabel: WKInterfaceLabel!
+    @IBOutlet weak var acclabel: WKInterfaceLabel!
     @IBOutlet weak var heartRate: WKInterfaceLabel!
     @IBOutlet weak var startButton: WKInterfaceButton!
     
     // Properties
     private let workoutManager = WorkoutManager()
-    
     let session = WCSession.default
     var n = 0
     var bupdate = false
     var accdatas = String()
-    var gyrodatas = String()
-    
+    var datas = String()
+    let healthStore = HKHealthStore()
     let motionManager = CMMotionManager()
     var heartbit = String(0)
     
@@ -47,6 +49,20 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
     override func willActivate() {
         super.willActivate()
         
+      
+      
+        
+        let allTypes = Set([HKObjectType.workoutType(),
+                            HKObjectType.quantityType(forIdentifier: .heartRate)!])
+
+        healthStore.requestAuthorization(toShare: allTypes, read: allTypes) { (success, error) in
+            if !success {
+                print("Error")
+                // Handle the error here.
+            }
+        }
+        
+        
         workoutManager.delegate = self
         
         // This method is called when watch view controller is about to be visible to user
@@ -60,6 +76,39 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
             }
         }
     }
+    
+   
+    
+    
+    //Permission
+    func requestHealthkit(_ healthStore:HKHealthStore) {
+        let writableTypes: Set<HKSampleType> = [
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)!,
+            HKWorkoutType.workoutType(),
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!,
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.activeEnergyBurned)!,
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        ]
+        let readableTypes: Set<HKSampleType> = [
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)!,
+            HKWorkoutType.workoutType(),
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!,
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.activeEnergyBurned)!,
+            HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        ]
+
+
+        healthStore.requestAuthorization(toShare: writableTypes, read: readableTypes) { (success, error) -> Void in
+            if success {
+                print("[HealthKit] request Authorization succeed!")
+            } else {
+                print("[HealthKit] request Authorization failed!")
+            }
+            if let error = error { print("[HealthKit] An error occurred: \(error)") }
+        }
+    }
+    
+    
     
     @IBAction func didTapButton() {
         switch workoutManager.state {
@@ -126,44 +175,16 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
                     let gyroy=String(format: "%0.3f", deviceMotion.rotationRate.y )
                     let gyroz=String(format: "%0.3f", deviceMotion.rotationRate.z )
 
-                    
 //                    let deviceHeadingAngle = deviceMotion.heading
-                    self.stringlabel.setText("gyroX:\(gyrox) gyroY:\(gyroy) gyroZ:\(gyroz)")
-                    self.gyrodatas += "GYRO: \(currentdatetime),\(gyrox),\(gyroy),\(gyroz),ACC : \(accx),\(accy),\(accz),gravityACC : \(gravityAccx),\(gravityAccy),\(gravityAccz),\(self.heartbit);\n"
-                    let sendmessage = self.gyrodatas
-                    print(sendmessage)
-                    self.gyrodatas = ""
+                    self.gyroslabel.setText("\(gyrox),\(gyroy),\(gyroz)")
+                    self.acclabel.setText("\(gravityAccx),\(gravityAccy),\(gravityAccz)")
+                    self.datas += "\(currentdatetime),\(gyrox),\(gyroy),\(gyroz),\(accx),\(accy),\(accz), \(self.heartbit);\n"
+                    let sendmessage = self.datas
+                   // print(sendmessage)
+                    self.datas = ""
                     self.session.sendMessage(["watch":sendmessage as String], replyHandler: nil,errorHandler: nil)
                     
-                    // If the message failed to send, queue it up for future transfer
-//                    self.n+=1
-//                    let sendmessage=self.accdatas
-//                    self.accdatas=""
-//                    print("GYRO"+sendmessage+self.heartbit)
-//
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now()+0.066)
-//                    {
-//                        self.motionManager.startAccelerometerUpdates(to: OperationQueue.current!,withHandler:{(data,error)in
-//                            if let data=data
-//                            {
-//                                let currentdatetime=String(format: "%0.0f",Date().timeIntervalSince1970 * 1000)
-//                                let accx=String(format: "%0.3f", data.acceleration.x )
-//                                let accy=String(format: "%0.3f", data.acceleration.y )
-//                                let accz=String(format: "%0.3f", data.acceleration.z )
-//
-//                                self.stringlabel.setText("accX:\(accx) accY:\(accy) accZ:\(accz)")
-//                                self.accdatas += "ACC"+"\(currentdatetime),\(accx),\(accy),\(accz);\n"
-//                                // If the message failed to send, queue it up for future transfer
-//                                self.n+=1
-            //                    let sendmessage=self.accdatas
-            //                    self.accdatas=""
-            //                    print("ACC"+sendmessage)
-            //                    self.session.sendMessage(["watchACC":sendmessage as String], replyHandler: nil,errorHandler: nil)
-                                //}
-//                            }
-//                        })
-                  //  }
+               
                 }
             }
         }
@@ -175,12 +196,14 @@ extension InterfaceController: WorkoutManagerDelegate {
     func workoutManager(_ manager: WorkoutManager, didChangeStateTo newState: WorkoutState) {
         // Update title of control button.
         startButton.setTitle(newState.actionText())
+        print("START")
     }
     
     func workoutManager(_ manager: WorkoutManager, didChangeHeartRateTo newHeartRate: HeartRate) {
+        print(newHeartRate.bpm)
         // Update heart rate label.
         heartRate.setText(String(format: "%.0f", newHeartRate.bpm))
         self.heartbit =  String(format: "%.0f", newHeartRate.bpm)
-        print("SEDF")
+        print(newHeartRate.bpm)
     }
 }
