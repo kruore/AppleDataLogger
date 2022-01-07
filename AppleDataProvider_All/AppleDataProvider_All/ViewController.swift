@@ -515,7 +515,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                let airpotData = String(format: "%.3f %.3f %.3f %.3f %.3f %.3f %.3f \n",
+               // let dataCategory = "timestamp,gravity.x,gravity.y,gravity.z,acc.x,acc.y,acc.z\n"
+              // if let locationData = dataCategory.data(using: .utf8) {
+                    //self.fileHandlers[self.WATCH_TXT].write(locationData)
+                
+                let airpotData = String(format: "%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
                                           timestamp,
                                         data.gravity.x,
                                         data.gravity.y,
@@ -560,7 +564,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             // custom queue to save GPS location data
             self.customQueue.async {
                 if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                    let locationData = String(format: "%.0f %.6f %.6f %.6f %.6f %.6f %.6f \n",
+                    let locationData = String(format: "%.0f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f\n",
                                               timestamp,
                                               latitude,
                                               longitude,
@@ -651,7 +655,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
                             
                             // the device orientation expressed in the quaternion format
-                            let attitudeData = String(format: "%.0f %.6f %.6f %.6f %.6f \n",
+                            let attitudeData = String(format: "%.0f,%.6f,%.6f,%.6f,%.6f\n",
                                                       timestamp,
                                                       deviceOrientationQx,
                                                       deviceOrientationQy,
@@ -664,7 +668,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the unbiased rotation rate
-                            let processedGyroData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let processedGyroData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                            timestamp,
                                                            processedGyroDataX,
                                                            processedGyroDataY,
@@ -676,7 +680,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the current gravity vector
-                            let gravityData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let gravityData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                      timestamp,
                                                      gravityGx,
                                                      gravityGy,
@@ -688,7 +692,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the user-generated acceleration vector (without gravity)
-                            let userAccelData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let userAccelData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                        timestamp,
                                                        userAccelDataX,
                                                        userAccelDataY,
@@ -700,7 +704,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the current magnetic field vector
-                            let magneticData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let magneticData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                       timestamp,
                                                       magneticFieldX,
                                                       magneticFieldY,
@@ -712,7 +716,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the heading angle (degrees) relative to the reference frame
-                            let headingAngleData = String(format: "%.0f %.6f \n",
+                            let headingAngleData = String(format: "%.0f,%.6f\n",
                                                           timestamp,
                                                           deviceHeadingAngle)
                             if let headingAngleDataToWrite = headingAngleData.data(using: .utf8) {
@@ -750,7 +754,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     // custom queue to save IMU text data
                     self.customQueue.async {
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                            let rawAccelData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let rawAccelData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                       timestamp,
                                                       rawAccelDataX,
                                                       rawAccelDataY,
@@ -790,7 +794,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     // custom queue to save IMU text data
                     self.customQueue.async {
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                            let rawGyroData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let rawGyroData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                      timestamp,
                                                      rawGyroDataX,
                                                      rawGyroDataY,
@@ -823,7 +827,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     // custom queue to save IMU text data
                     self.customQueue.async {
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                            let rawMagnetData = String(format: "%.0f %.6f %.6f %.6f \n",
+                            let rawMagnetData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
                                                        timestamp,
                                                        rawMagnetDataX,
                                                        rawMagnetDataY,
@@ -872,7 +876,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     // custom queue to save pedometer data
                     self.customQueue.async {
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                            let pedoData = String(format: "%.0f %04d %.3f \n",
+                            let pedoData = String(format: "%.0f,%04d,%.3f\n",
                                                   timestamp,
                                                   stepCounter,
                                                   distance)
@@ -908,7 +912,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
                             
                             // the change in altitude (in meters) since the first reported event
-                            let relativeAltitudeData = String(format: "%.0f %.6f \n",
+                            let relativeAltitudeData = String(format: "%.0f,%.6f\n",
                                                               timestamp,
                                                               relativeAltitude)
                             if let relativeAltitudeDataToWrite = relativeAltitudeData.data(using: .utf8) {
@@ -918,7 +922,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                             }
                             
                             // the recorded pressure (in kilopascals)
-                            let pressureData = String(format: "%.0f %.6f \n",
+                            let pressureData = String(format: "%.0f,%.6f\n",
                                                       timestamp,
                                                       pressure)
                             if let pressureDataToWrite = pressureData.data(using: .utf8) {
@@ -947,7 +951,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
                         
                         // the battery charge level for the device
-                        let batteryLevelData = String(format: "%.0f %.6f \n",
+                        let batteryLevelData = String(format: "%.0f,%.6f\n",
                                                       timestamp,
                                                       batteryLevel)
                         if let batteryLevelDataToWrite = batteryLevelData.data(using: .utf8) {
@@ -1011,15 +1015,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             url.appendPathComponent(krs+UIDevice.current.name+fileNames[i])
             self.fileURLs.append(url)
             
-            // delete previous text files
-            if (FileManager.default.fileExists(atPath: url.path)) {
-                do {
-                    try FileManager.default.removeItem(at: url)
-                } catch {
-                    os_log("cannot remove previous file", log:.default, type:.error)
-                    return false
-                }
-            }
+//            // delete previous text files
+//            if (FileManager.default.fileExists(atPath: url.path)) {
+//                do {
+//                    try FileManager.default.removeItem(at: url)
+//                } catch {
+//                    os_log("cannot remove previous file", log:.default, type:.error)
+//                    return false
+//                }
+//            }
             
             // create new text files
             if (!FileManager.default.createFile(atPath: url.path, contents: startHeader.data(using: String.Encoding.utf8), attributes: nil)) {
@@ -1035,11 +1039,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 return false
             }
         }
-        
+//                                   "gyro.txt",
+//                                   "gyro_uncalib.txt",
+//                                   "acce.txt",
+//                                   "linacce.txt",
+//                                   "gravity.txt",
+//                                   "magnet.txt",
+//                                   "magnet_uncalib.txt",
+//                                   "game_rv.txt",
+//                                   "gps.txt",
+//                                   "step.txt",
+//                                   "heading.txt",
+//                                   "height.txt",
+//                                   "pressure.txt",
+//                                   "battery.txt",
+//                                   "airpot.txt",
+//                                   "watch.text"
+//
         // write current recording time information
-        let timeHeader = "# Created at \(timeToString()) in KINLAB \n"
+        let timeHeader = ["timestamp,gyro.x,gyro.y,gyro.z\n",
+                          "timestamp,unclib_gyro.x,unclib_gyro.y,unclib_gyro.z\n",
+                          "timestamp,acce.x,acce.y,acce.z\n",
+                          "timestamp,linacce.x,linacce.y,linacce.z\n",
+                          "timestamp,gravity.x,gravity.y,gravity.z\n",
+                          "timestamp,magnet.x,magnet.y,magnet.z\n",
+                          "timestamp,unclib_magnet.x,unclib_magnet.y,unblib_magnet.z\n",
+                          "timestamp,device.qx,device.qy,device.qz,device.qz\n",
+                          "timestamp,latitude,longitude,horizontalAccuracy,altitude,verticalAccuracy,buildingFloor\n",
+                          "timestamp,stepCount,distance\n",
+                          "timestamp,heading\n",
+                          "timestamp,height\n",
+                          "timestamp,pressure\n",
+                          "timestamp,battery\n",
+                          "timestamp,airpot_gyro.x,airpot_gyro.y,airpot_gyro.z,airpot_acc.x,airpot_acc.y,airpot_acc.z\n",
+                          "timestamp,watch_gyro.x,watch_gyro.y,watch_gyro.z,watch_acc.x,watch_acc.y,watch_acc.z,heatRate\n",
+        ]
         for i in 0...(self.numSensor - 1) {
-            if let timeHeaderToWrite = timeHeader.data(using: .utf8) {
+            if let timeHeaderToWrite = timeHeader[i].data(using: .utf8) {
                 self.fileHandlers[i].write(timeHeaderToWrite)
             } else {
                 os_log("Failed to write data record", log: OSLog.default, type: .fault)
