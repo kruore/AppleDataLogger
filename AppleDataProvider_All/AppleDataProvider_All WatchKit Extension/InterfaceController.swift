@@ -165,7 +165,7 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
                     let accx = String(format: "%0.3f", deviceMotion.userAcceleration.x);
                     let accy = String(format: "%0.3f", deviceMotion.userAcceleration.y);
                     let accz = String(format: "%0.3f", deviceMotion.userAcceleration.z);
-                    
+
                     let gravityAccx = String(format: "%0.3f", deviceMotion.userAcceleration.x * 9.81);
                     let gravityAccy = String(format: "%0.3f", deviceMotion.userAcceleration.y * 9.81);
                     let gravityAccz = String(format: "%0.3f", deviceMotion.userAcceleration.z * 9.81);
@@ -178,7 +178,7 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
 //                    let deviceHeadingAngle = deviceMotion.heading
                     self.gyroslabel.setText("\(gyrox),\(gyroy),\(gyroz)")
                     self.acclabel.setText("\(gravityAccx),\(gravityAccy),\(gravityAccz)")
-                    self.datas += "\(currentdatetime),\(gyrox),\(gyroy),\(gyroz),\(accx),\(accy),\(accz), \(self.heartbit);\n"
+                    self.datas += "\(currentdatetime),\(gyrox),\(gyroy),\(gyroz),\(accx),\(accy),\(accz),\(self.heartbit);"
                     let sendmessage = self.datas
                    // print(sendmessage)
                     self.datas = ""

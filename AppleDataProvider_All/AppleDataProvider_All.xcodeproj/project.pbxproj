@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF0FC5EE278C2E7300AA2FA4 /* TCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0FC5ED278C2E7300AA2FA4 /* TCPClient.swift */; };
 		DF32A0FF27845696002C483D /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF32A0FE27845696002C483D /* InterfaceController.swift */; };
 		DF47098E2771A39700659F05 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF47098D2771A39700659F05 /* HealthKit.framework */; };
 		DF4709912771A3A800659F05 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4709902771A3A800659F05 /* HealthKit.framework */; };
@@ -75,6 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DF0FC5ED278C2E7300AA2FA4 /* TCPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPClient.swift; sourceTree = "<group>"; };
 		DF32A0FE27845696002C483D /* InterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		DF47098B2771A39600659F05 /* AppleDataProvider_All.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppleDataProvider_All.entitlements; sourceTree = "<group>"; };
 		DF47098D2771A39700659F05 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -183,6 +185,7 @@
 				DFDBF5CC277065DB002C10E3 /* LaunchScreen.storyboard */,
 				DFDBF5CF277065DB002C10E3 /* Info.plist */,
 				DF4709922771B3ED00659F05 /* HeartRate.swift */,
+				DF0FC5ED278C2E7300AA2FA4 /* TCPClient.swift */,
 			);
 			path = AppleDataProvider_All;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFDBF5C6277065DA002C10E3 /* ViewController.swift in Sources */,
+				DF0FC5EE278C2E7300AA2FA4 /* TCPClient.swift in Sources */,
 				DFDBF5C2277065DA002C10E3 /* AppDelegate.swift in Sources */,
 				DF4709932771B3ED00659F05 /* HeartRate.swift in Sources */,
 				DFDBF5C4277065DA002C10E3 /* SceneDelegate.swift in Sources */,

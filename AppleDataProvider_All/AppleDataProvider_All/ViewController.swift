@@ -248,6 +248,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     let DeviceInfo = UIDevice.current.name
     
     let now = Date()
+    let tcpmanager = TCPClient(hostName: "210.94.216.195", port: 4545)
     
     var fileNames: [String] = ["gyro.txt",
                                "gyro_uncalib.txt",
@@ -266,16 +267,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                                "airpot.txt",
                                "watch.text"]
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let session=WCSession.default
         
         session.delegate=self
         session.activate()
-        
-        
-   
                     
       
         //heartrate.text = rate
@@ -322,12 +319,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         pedoMeter.stopUpdates()
         altimeter.stopRelativeAltitudeUpdates()
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.tcpmanager.stop()
+    }
     
     // when the Start/Stop button is pressed
     @IBAction func startStopButtonPressed(_ sender: UIButton) {
         if (self.isRecording == false) {
-            
             // start GPS/IMU data recording
             customQueue.async {
                 if (self.createFiles()) {
@@ -345,6 +343,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         UIApplication.shared.isIdleTimerDisabled = true
                     }
                     self.isRecording = true
+                    self.tcpmanager.start()
                 } else {
                     self.errorMsg(msg: "Failed to create the file")
                     return
@@ -399,7 +398,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             
             self.startStopButton.setTitle("Start", for: .normal)
             self.statusLabel.text = "Ready"
-            
+            tcpmanager.stop()
             // resume screen lock
             UIApplication.shared.isIdleTimerDisabled = false
         }
@@ -456,9 +455,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                let watchData = ("\(seperator[0]),\(seperator[1]),\(seperator[2]),\(seperator[3]),\(seperator[4]),\(seperator[5]),\(seperator[6]),\(seperator[7])")
+                let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
                 if let locationDataToWrite = watchData.data(using: .utf8) {
                     self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
+                    self.tcpmanager.send(line: "WATCH,\(seperator[0]),4,\(watchData)")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
@@ -511,7 +511,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
         
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
-        let timestamp = Date().timeIntervalSince1970
+        let timestamp = Date().timeIntervalSince1970*1000
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
@@ -519,7 +519,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
               // if let locationData = dataCategory.data(using: .utf8) {
                     //self.fileHandlers[self.WATCH_TXT].write(locationData)
                 
-                let airpotData = String(format: "%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
+                let airpotData = String(format: "%.3f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f",
                                           timestamp,
                                         data.gravity.x,
                                         data.gravity.y,
@@ -530,6 +530,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                                          )
                 if let locationDataToWrite = airpotData.data(using: .utf8) {
                     self.fileHandlers[self.AIRPOT_TXT].write(locationDataToWrite)
+                    self.tcpmanager.send(line: "AIRPOT,\(timestamp),4,\(airpotData);")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
@@ -827,7 +828,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     // custom queue to save IMU text data
                     self.customQueue.async {
                         if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                            let rawMagnetData = String(format: "%.0f,%.6f,%.6f,%.6f\n",
+                            let rawMagnetData = String(format: "%.0f^%.6f^%.6f^%.6f\n",
                                                        timestamp,
                                                        rawMagnetDataX,
                                                        rawMagnetDataY,
