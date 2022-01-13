@@ -10,6 +10,7 @@ import Network
 import HealthKit
 class TCPClient
 {
+    var PTPcheck:Bool
     init(hostName:String, port:Int)
     {
         let host = NWEndpoint.Host(hostName)
@@ -17,6 +18,7 @@ class TCPClient
         self.connection = NWConnection(host: host, port: port, using:.tcp)
         print("\(hostName)::port\(port)")
         NSLog("init")
+        PTPcheck=true
     }
     let connection:NWConnection
     
@@ -26,7 +28,7 @@ class TCPClient
         self.startReceive()
         self.connection.start(queue: .main)
         self.send(line: "%^&IOS")
-        
+        PTPcheck=true
         print(self.connection.state)
         NSLog("start")
     }
@@ -63,9 +65,10 @@ class TCPClient
             if let data = data, !data.isEmpty
             {
                 let datas=String(decoding:data, as: UTF8.self)
-                NSLog("did receive, data: %@", datas)
-                self.send(line: String(format: "\(datas),%.0f;", Date().timeIntervalSince1970*1000))
-                NSLog(String(format: "\(datas),%.0f;", Date().timeIntervalSince1970*1000))
+                //NSLog("did receive, data: %@", datas)
+                let sendstring=String(format: "\(datas),%.0f", Date().timeIntervalSince1970*1000)
+                self.send(line: sendstring)
+                //print("PTPSENDING\(sendstring)")
             }
             if let error = error
             {
@@ -82,6 +85,8 @@ class TCPClient
     }
     func send(line: String)
     {
+        if(PTPcheck==true)
+        {
         print(line)
         let data = Data("\(line)".utf8)
         self.connection.send(content: data, completion: NWConnection.SendCompletion.contentProcessed{
@@ -94,6 +99,10 @@ class TCPClient
                 NSLog("did send, data: %@", data as NSData)
             }
         })
+        }
+        
     }
+    
+
    
 }

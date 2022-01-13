@@ -320,7 +320,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         altimeter.stopRelativeAltitudeUpdates()
     }
     override func viewDidDisappear(_ animated: Bool) {
-        self.tcpmanager.stop()
     }
     
     // when the Start/Stop button is pressed
