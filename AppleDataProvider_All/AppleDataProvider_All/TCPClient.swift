@@ -66,7 +66,7 @@ class TCPClient
             {
                 let datas=String(decoding:data, as: UTF8.self)
                 //NSLog("did receive, data: %@", datas)
-                let sendstring=String(format: "\(datas),%.0f", Date().timeIntervalSince1970*1000)
+                let sendstring=String(format: "\(datas),%.0f;", Date().timeIntervalSince1970*1000)
                 self.send(line: sendstring)
                 //print("PTPSENDING\(sendstring)")
             }

@@ -16,6 +16,7 @@ import HealthKit
 class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMotionManagerDelegate, WCSessionDelegate {
     
 
+    var timestamp = Date().timeIntervalSince1970*1000
     var mTimer : Timer?
 
     func testMain(){
@@ -442,12 +443,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         DispatchQueue.main.async
         {
 
-            self.watchAccx.text = seperator[1]
-            self.watchAccy.text = seperator[2]
-            self.watchAccz.text = seperator[3]
-            self.watchGyrox.text = seperator[4]
-            self.watchGyroy.text = seperator[5]
-            self.watchGyroz.text = seperator[6]
+            self.watchGyrox.text = seperator[1]
+            self.watchGyroy.text = seperator[2]
+            self.watchGyroz.text = seperator[3]
+            self.watchAccx.text = seperator[4]
+            self.watchAccy.text = seperator[5]
+            self.watchAccz.text = seperator[6]
             self.heartrate.text = seperator[7]
             print(self.vectorvalue)
         }
@@ -468,6 +469,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     func updateLabel_Airpot(_ data: CMDeviceMotion) {
         //print(data)
         let formatter = DateFormatter()
+        self.timestamp = Date().timeIntervalSince1970 * 1000;
         formatter.dateFormat="yMMddHmss.SSSS"
 //        self.string = """
 //            Quaternion:
@@ -510,7 +512,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
         
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
-        let timestamp = Date().timeIntervalSince1970*1000
+       
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
@@ -518,8 +520,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
               // if let locationData = dataCategory.data(using: .utf8) {
                     //self.fileHandlers[self.WATCH_TXT].write(locationData)
                 
-                let airpotData = String(format: "%.3f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f",
-                                          timestamp,
+                let airpotData = String(format: "%.0f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f",
+                                        self.timestamp,
                                         data.gravity.x,
                                         data.gravity.y,
                                         data.gravity.z,
@@ -527,9 +529,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                                         data.userAcceleration.y,
                                         data.userAcceleration.z
                                          )
+                
+                let airpotTime = String(format: "%0.f", self.timestamp)
                 if let locationDataToWrite = airpotData.data(using: .utf8) {
                     self.fileHandlers[self.AIRPOT_TXT].write(locationDataToWrite)
-                    self.tcpmanager.send(line: "AIRPOT,\(timestamp),4,\(airpotData);")
+                    self.tcpmanager.send(line: "AIRPOT,\(airpotTime),4,\(airpotData);")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
@@ -604,10 +608,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         // 1) update device motion
         if (!motionManager.isDeviceMotionActive)
         {
+            
             motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main) { (motion: CMDeviceMotion?, error: Error?) in
                 
                 // optional binding for safety
                 if let deviceMotion = motion {
+                    
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
                     //let timestamp = deviceMotion.timestamp * self.mulSecondToNanoSecond
                     let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
