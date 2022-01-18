@@ -249,7 +249,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     let DeviceInfo = UIDevice.current.name
     
     let now = Date()
-    let tcpmanager = TCPClient(hostName: "210.94.216.195", port: 4545)
+    let tcpmanager = TCPClient(hostName: "192.168.1.2", port: 4545)
     
     var fileNames: [String] = ["gyro.txt",
                                "gyro_uncalib.txt",
@@ -438,6 +438,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     }
     func updateLabel_Watch()
     {
+       
         let line = self.vectorvalue
         let seperator = line.components(separatedBy: ",")
         DispatchQueue.main.async
@@ -455,10 +456,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
+                
+                 let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
+                 let timeS = String(format: "%.0f",timestamp)
                 let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
                 if let locationDataToWrite = watchData.data(using: .utf8) {
                     self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
-                    self.tcpmanager.send(line: "WATCH,\(seperator[0]),4,\(watchData)")
+                    self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
@@ -467,7 +471,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     }
     
     func updateLabel_Airpot(_ data: CMDeviceMotion) {
-        //print(data)
+        s//print(data)
         let formatter = DateFormatter()
         self.timestamp = Date().timeIntervalSince1970 * 1000;
         formatter.dateFormat="yMMddHmss.SSSS"

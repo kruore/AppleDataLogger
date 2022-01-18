@@ -178,6 +178,7 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
 //                    let deviceHeadingAngle = deviceMotion.heading
                     self.gyroslabel.setText("\(gyrox),\(gyroy),\(gyroz)")
                     self.acclabel.setText("\(gravityAccx),\(gravityAccy),\(gravityAccz)")
+                    
                     self.datas += "\(currentdatetime),\(gyrox),\(gyroy),\(gyroz),\(accx),\(accy),\(accz),\(self.heartbit);"
                     let sendmessage = self.datas
                    // print(sendmessage)
