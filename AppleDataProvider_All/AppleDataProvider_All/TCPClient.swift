@@ -8,8 +8,11 @@
 import Foundation
 import Network
 import HealthKit
+
+
 class TCPClient
 {
+    
     var PTPcheck:Bool
     init(hostName:String, port:Int)
     {
@@ -27,8 +30,9 @@ class TCPClient
         self.connection.stateUpdateHandler = self.didChange(state:)
         self.startReceive()
         self.connection.start(queue: .main)
-        self.send(line: "%^&IOS")
+        self.send(line: "%^&IOS;")
         PTPcheck=true
+        ViewController.watch_SendStart = true
         print(self.connection.state)
         NSLog("start")
     }

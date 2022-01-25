@@ -20,6 +20,9 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
     {
     }
     
+    var i = 0
+    var buffer = ""
+    
     @IBOutlet weak var gyroslabel: WKInterfaceLabel!
     @IBOutlet weak var acclabel: WKInterfaceLabel!
     @IBOutlet weak var heartRate: WKInterfaceLabel!
@@ -36,7 +39,6 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
     let motionManager = CMMotionManager()
     var heartbit = String(0)
     
-    
     var sendMessage_Final = String()
     
     override func awake(withContext context: Any?) {
@@ -49,12 +51,10 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
     override func willActivate() {
         super.willActivate()
         
-      
-      
         
         let allTypes = Set([HKObjectType.workoutType(),
                             HKObjectType.quantityType(forIdentifier: .heartRate)!])
-
+        
         healthStore.requestAuthorization(toShare: allTypes, read: allTypes) { (success, error) in
             if !success {
                 print("Error")
@@ -77,7 +77,7 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
         }
     }
     
-   
+    
     
     
     //Permission
@@ -96,8 +96,8 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
             HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.activeEnergyBurned)!,
             HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
         ]
-
-
+        
+        
         healthStore.requestAuthorization(toShare: writableTypes, read: readableTypes) { (success, error) -> Void in
             if success {
                 print("[HealthKit] request Authorization succeed!")
@@ -145,27 +145,28 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
         {
             motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main) { (motion: CMDeviceMotion?, error: Error?) in
                 
+                
                 // optional binding for safety
                 if let deviceMotion = motion {
                     let timestamp = Date().timeIntervalSince1970 * 1000
-                  
-//                    let deviceOrientationRx = deviceMotion.attitude.pitch
-//                    let deviceOrientationRy = deviceMotion.attitude.roll
-//                    let deviceOrientationRz = deviceMotion.attitude.yaw
-//
-//                    let deviceOrientationQx = deviceMotion.attitude.quaternion.x
-//                    let deviceOrientationQy = deviceMotion.attitude.quaternion.y
-//                    let deviceOrientationQz = deviceMotion.attitude.quaternion.z
-//                    let deviceOrientationQw = deviceMotion.attitude.quaternion.w
-
-//                    let magneticFieldX = deviceMotion.magneticField.field.x
-//                    let magneticFieldY = deviceMotion.magneticField.field.y
-//                    let magneticFieldZ = deviceMotion.magneticField.field.z
+                    
+                    //                    let deviceOrientationRx = deviceMotion.attitude.pitch
+                    //                    let deviceOrientationRy = deviceMotion.attitude.roll
+                    //                    let deviceOrientationRz = deviceMotion.attitude.yaw
+                    //
+                    //                    let deviceOrientationQx = deviceMotion.attitude.quaternion.x
+                    //                    let deviceOrientationQy = deviceMotion.attitude.quaternion.y
+                    //                    let deviceOrientationQz = deviceMotion.attitude.quaternion.z
+                    //                    let deviceOrientationQw = deviceMotion.attitude.quaternion.w
+                    
+                    //                    let magneticFieldX = deviceMotion.magneticField.field.x
+                    //                    let magneticFieldY = deviceMotion.magneticField.field.y
+                    //                    let magneticFieldZ = deviceMotion.magneticField.field.z
                     
                     let accx = String(format: "%0.3f", deviceMotion.userAcceleration.x);
                     let accy = String(format: "%0.3f", deviceMotion.userAcceleration.y);
                     let accz = String(format: "%0.3f", deviceMotion.userAcceleration.z);
-
+                    
                     let gravityAccx = String(format: "%0.3f", deviceMotion.userAcceleration.x * 9.81);
                     let gravityAccy = String(format: "%0.3f", deviceMotion.userAcceleration.y * 9.81);
                     let gravityAccz = String(format: "%0.3f", deviceMotion.userAcceleration.z * 9.81);
@@ -174,18 +175,24 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
                     let gyrox=String(format: "%0.3f", deviceMotion.rotationRate.x )
                     let gyroy=String(format: "%0.3f", deviceMotion.rotationRate.y )
                     let gyroz=String(format: "%0.3f", deviceMotion.rotationRate.z )
-
-//                    let deviceHeadingAngle = deviceMotion.heading
+                    
+                    //                    let deviceHeadingAngle = deviceMotion.heading
                     self.gyroslabel.setText("\(gyrox),\(gyroy),\(gyroz)")
                     self.acclabel.setText("\(gravityAccx),\(gravityAccy),\(gravityAccz)")
                     
                     self.datas += "\(currentdatetime),\(gyrox),\(gyroy),\(gyroz),\(accx),\(accy),\(accz),\(self.heartbit);"
                     let sendmessage = self.datas
-                   // print(sendmessage)
+                    // print(sendmessage)
                     self.datas = ""
-                    self.session.sendMessage(["watch":sendmessage as String], replyHandler: nil,errorHandler: nil)
                     
-               
+                    self.i+=1
+                    self.buffer+=sendmessage
+                    if(self.i==5)
+                    {
+                        self.session.sendMessage(["watch":self.buffer as String], replyHandler: nil,errorHandler: nil)
+                        self.buffer = ""
+                        self.i=0
+                    }
                 }
             }
         }

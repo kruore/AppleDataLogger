@@ -15,78 +15,25 @@ import HealthKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMotionManagerDelegate, WCSessionDelegate {
     
-
+    
+    static var watch_SendStart = false
+    
     var timestamp = Date().timeIntervalSince1970*1000
-    var mTimer : Timer?
-
-    func testMain(){
-            print("")
-            print("===============================")
-            print("[Program Start]")
-            print("===============================")
-            print("")
-
-            // 실시간 반복 작업 시작 실시
-            startTimer()
-        }
-
-
-        // [실시간 반복 작업 시작 호출]
-        var timer : Timer?
-        func startTimer(){
-            print("")
-            print("===============================")
-            print("[startTimer : start]")
-            print("===============================")
-            print("")
-            // [타이머 객체 생성 실시]
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
-        }
-        // [실시간 반복 작업 수행 부분]
-        @objc func timerCallback() {
-            print("")
-            print("===============================")
-            print("[timerCallback : run]")
-            print("[intCount : \(heartRate_int)")
-            print("===============================")
-            print("")
-            self.heartrate.text = heartRate_int
-            // [처리할 로직 작성 실시]
-//            displayText.text = String(intCount) // UI 카운트 값 표시 실시
-//            intCount += 1 // 1씩 카운트 값 증가 실시
-//            if intCount > 5 { // 카운트 값이 5인 경우
-//                stopTimer() // 타이머 종료 실시
-//                showAlert(tittle: "카운트 알림", content: "타이머 종료", okBtb: "확인", noBtn: "") // 팝업창 호출
-
-        }
-        // [실시간 반복 작업 정지 호출]
-        func stopTimer(){
-            print("")
-            print("===============================")
-            print("[stopTimer : end]")
-            print("===============================")
-            print("")
-            // [실시간 반복 작업 중지]
-            if timer != nil && timer!.isValid {
-                timer!.invalidate()
-            }
-        }
-//
-//
+    
     func getSamples() {
-
+        
         let heathStore = HKHealthStore()
-
+        
         let heartrate = HKQuantityType.quantityType(forIdentifier: .heartRate)
         let sort: [NSSortDescriptor] = [
             .init(key: HKSampleSortIdentifierStartDate, ascending: false)
         ]
-
+        
         let sampleQuery = HKSampleQuery(sampleType: heartrate!, predicate: nil, limit: 1, sortDescriptors: sort, resultsHandler: resultsHandler)
-
+        
         heathStore.execute(sampleQuery)
     }
-
+    
     func resultsHandler(query: HKSampleQuery, results: [HKSample]?, error: Error?) {
         guard error == nil else {
             print("cant read heartRate data", error!)
@@ -97,14 +44,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         // let doubleValue = sample.quantity.doubleValue(for: heartRateUnit)
         print("heart rate is", sample)
     }
-
+    
     let healthStore = HKHealthStore()
-
+    
     func authorizeHealthKit()
     {
         let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
         let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-
+        
         healthStore.requestAuthorization(toShare: share, read: read) { chk, error in
             if(chk)
             {
@@ -113,20 +60,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             }
         }
     }
-
+    
     func latestHeartRate()
     {
-
+        
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else
         {
             return
         }
         let startData = Calendar.current.date(byAdding: .month, value: -1, to: Date())
-
+        
         let predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: .strictEndDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-
-
+        
+        
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]){(sample, result, error) in guard error == nil else{
             return
         }
@@ -137,9 +84,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             print("Latest hr\(latestHr) BPM")
             print(latestHr)
         }
-
+        
         healthStore.execute(query)
-
+        
     }
     var rate = ""
     //APK(Watch)
@@ -157,7 +104,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     var vectorvalue : String=""
     var wcsession : WCSession!
     var strarr_airpot: Array<String> = Array()
-
+    
     @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
     
@@ -274,8 +221,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         session.delegate=self
         session.activate()
-                    
-      
+        
+        
         //heartrate.text = rate
         
         // default device setting
@@ -299,10 +246,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             self.startAltimeterUpdate()
             self.startBatteryLevelUpdate()
         }
-        startTimer()
+        
         
         APP_airpot.delegate = self
-
+        
         guard APP_airpot.isDeviceMotionAvailable else { return }
         APP_airpot.startDeviceMotionUpdates(to: OperationQueue.current!, withHandler: {[weak self] motion, error  in
             guard let motion = motion, error == nil else { return }
@@ -314,9 +261,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         locationManager.stopUpdatingLocation()
         customQueue.sync {
             stopIMUUpdate()
-           
+            
         }
-        stopTimer()
+        
         pedoMeter.stopUpdates()
         altimeter.stopRelativeAltitudeUpdates()
     }
@@ -375,9 +322,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             // initialize UI on the screen
             self.latitudeLabel.text = String(format:"%.3f", self.defaultValue)
             self.longitudeLabel.text = String(format:"%.3f", self.defaultValue)
-        
+            
             self.altitudeLabel.text = String(format:"%.2f", self.defaultValue)
-          
+            
             self.rxLabel.text = String(format:"%.3f", self.defaultValue)
             self.ryLabel.text = String(format:"%.3f", self.defaultValue)
             self.rzLabel.text = String(format:"%.3f", self.defaultValue)
@@ -418,14 +365,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         if let value=message["watch"] as? String{
             vectorvalue=value
             strarr.append(value)
-            updateLabel_Watch()
+            if(ViewController.watch_SendStart)
+            {
+                updateLabel_Watch()
+            }
         }
-//        if let watchgyro = message["watchGyro"] as? String{
-//            print("Gyro : "  + watchgyro)
-//        }
-//        if let watchacc = message["watchAcc"] as? String{
-//            print("Acc : " + watchacc)
-//        }
+        //        if let watchgyro = message["watchGyro"] as? String{
+        //            print("Gyro : "  + watchgyro)
+        //        }
+        //        if let watchacc = message["watchAcc"] as? String{
+        //            print("Acc : " + watchacc)
+        //        }
         APP_airpot.delegate = self
         
         guard APP_airpot.isDeviceMotionAvailable else { return }
@@ -438,71 +388,78 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     }
     func updateLabel_Watch()
     {
-       
         let line = self.vectorvalue
-        let seperator = line.components(separatedBy: ",")
-        DispatchQueue.main.async
+        
+        let seperatorArray = line.components(separatedBy: ";")
+        print(seperatorArray.count)
+        for i in 0...seperatorArray.endIndex-2
         {
-
-            self.watchGyrox.text = seperator[1]
-            self.watchGyroy.text = seperator[2]
-            self.watchGyroz.text = seperator[3]
-            self.watchAccx.text = seperator[4]
-            self.watchAccy.text = seperator[5]
-            self.watchAccz.text = seperator[6]
-            self.heartrate.text = seperator[7]
-            print(self.vectorvalue)
-        }
-        // custom queue to save GPS location data
-        self.customQueue.async {
-            if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-                
-                 let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                 let timeS = String(format: "%.0f",timestamp)
-                let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
-                if let locationDataToWrite = watchData.data(using: .utf8) {
-                    self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
-                    self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
-                } else {
-                    os_log("Failed to write data record", log: OSLog.default, type: .fault)
+            let seperator = seperatorArray[i].components(separatedBy: ",")
+            print(seperator[1])
+            DispatchQueue.main.async
+            {
+                self.watchGyrox.text = seperator[1]
+                self.watchGyroy.text = seperator[2]
+                self.watchGyroz.text = seperator[3]
+                self.watchAccx.text = seperator[4]
+                self.watchAccy.text = seperator[5]
+                self.watchAccz.text = seperator[6]
+                self.heartrate.text = seperator[7]
+                print(self.vectorvalue)
+            }
+            // custom queue to save GPS location data
+            self.customQueue.async {
+                if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
+                    
+                    let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
+                    let timeS = String(format: "%.0f",timestamp)
+                    
+                    
+                    let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
+                    if let locationDataToWrite = watchData.data(using: .utf8) {
+                        self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
+                        self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
+                    } else {
+                        os_log("Failed to write data record", log: OSLog.default, type: .fault)
+                    }
                 }
             }
         }
     }
     
     func updateLabel_Airpot(_ data: CMDeviceMotion) {
-        s//print(data)
+        //print(data)
         let formatter = DateFormatter()
         self.timestamp = Date().timeIntervalSince1970 * 1000;
         formatter.dateFormat="yMMddHmss.SSSS"
-//        self.string = """
-//            Quaternion:
-//                x: \(data.attitude.quaternion.x)
-//                y: \(data.attitude.quaternion.y)
-//                z: \(data.attitude.quaternion.z)
-//                w: \(data.attitude.quaternion.w)
-//            Attitude:
-//                pitch: \(data.attitude.pitch)
-//                roll: \(data.attitude.roll)
-//                yaw: \(data.attitude.yaw)
-//            Gravitational Acceleration:
-//                x: \(data.gravity.x)
-//                y: \(data.gravity.y)
-//                z: \(data.gravity.z)
-//            Rotation Rate:
-//                x: \(data.rotationRate.x)
-//                y: \(data.rotationRate.y)
-//                z: \(data.rotationRate.z)
-//            Acceleration:
-//                x: \(data.userAcceleration.x)
-//                y: \(data.userAcceleration.y)
-//                z: \(data.userAcceleration.z)
-//            Magnetic Field:
-//                field: \(data.magneticField.field)
-//                accuracy: \(data.magneticField.accuracy)
-//            Heading:
-//                \(data.heading)
-//            """
+        //        self.string = """
+        //            Quaternion:
+        //                x: \(data.attitude.quaternion.x)
+        //                y: \(data.attitude.quaternion.y)
+        //                z: \(data.attitude.quaternion.z)
+        //                w: \(data.attitude.quaternion.w)
+        //            Attitude:
+        //                pitch: \(data.attitude.pitch)
+        //                roll: \(data.attitude.roll)
+        //                yaw: \(data.attitude.yaw)
+        //            Gravitational Acceleration:
+        //                x: \(data.gravity.x)
+        //                y: \(data.gravity.y)
+        //                z: \(data.gravity.z)
+        //            Rotation Rate:
+        //                x: \(data.rotationRate.x)
+        //                y: \(data.rotationRate.y)
+        //                z: \(data.rotationRate.z)
+        //            Acceleration:
+        //                x: \(data.userAcceleration.x)
+        //                y: \(data.userAcceleration.y)
+        //                z: \(data.userAcceleration.z)
+        //            Magnetic Field:
+        //                field: \(data.magneticField.field)
+        //                accuracy: \(data.magneticField.accuracy)
+        //            Heading:
+        //                \(data.heading)
+        //            """
         let strings_x = String(format : "%.3f",data.gravity.x)
         let strings_y = String(format : "%.3f",data.gravity.y)
         let strings_z = String(format : "%.3f",data.gravity.z)
@@ -516,13 +473,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
         
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
-       
+        
         // custom queue to save GPS location data
         self.customQueue.async {
             if ((self.fileHandlers.count == self.numSensor) && self.isRecording) {
-               // let dataCategory = "timestamp,gravity.x,gravity.y,gravity.z,acc.x,acc.y,acc.z\n"
-              // if let locationData = dataCategory.data(using: .utf8) {
-                    //self.fileHandlers[self.WATCH_TXT].write(locationData)
+                // let dataCategory = "timestamp,gravity.x,gravity.y,gravity.z,acc.x,acc.y,acc.z\n"
+                // if let locationData = dataCategory.data(using: .utf8) {
+                //self.fileHandlers[self.WATCH_TXT].write(locationData)
                 
                 let airpotData = String(format: "%.0f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f",
                                         self.timestamp,
@@ -532,7 +489,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                                         data.userAcceleration.x,
                                         data.userAcceleration.y,
                                         data.userAcceleration.z
-                                         )
+                )
                 
                 let airpotTime = String(format: "%0.f", self.timestamp)
                 if let locationDataToWrite = airpotData.data(using: .utf8) {
@@ -550,7 +507,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         // optional binding for safety
         if let latestLocation = manager.location {
-         //   let timestamp = latestLocation.timestamp.timeIntervalSince1970 * self.mulSecondToNanoSecond
+            //   let timestamp = latestLocation.timestamp.timeIntervalSince1970 * self.mulSecondToNanoSecond
             let timestamp = Date().timeIntervalSince1970
             let latitude = latestLocation.coordinate.latitude
             let longitude = latestLocation.coordinate.longitude
@@ -657,7 +614,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         self.mxLabel.text = String(format:"%.3f", magneticFieldX)
                         self.myLabel.text = String(format:"%.3f", magneticFieldY)
                         self.mzLabel.text = String(format:"%.3f", magneticFieldZ)
-                
+                        
                     }
                     
                     // custom queue to save IMU text data
@@ -788,7 +745,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // optional binding for safety
                 if let gyroData = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                   // let timestamp = gyroData.timestamp * self.mulSecondToNanoSecond
+                    // let timestamp = gyroData.timestamp * self.mulSecondToNanoSecond
                     let timestamp = Date().timeIntervalSince1970
                     let rawGyroDataX = gyroData.rotationRate.x
                     let rawGyroDataY = gyroData.rotationRate.y
@@ -828,7 +785,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // optional binding for safety
                 if let magnetometerData = motion {
                     //let timestamp = Date().timeIntervalSince1970 * self.mulSecondToNanoSecond
-                   // let timestamp = magnetometerData.timestamp * self.mulSecondToNanoSecond
+                    // let timestamp = magnetometerData.timestamp * self.mulSecondToNanoSecond
                     let timestamp = Date().timeIntervalSince1970
                     let rawMagnetDataX = magnetometerData.magneticField.x
                     let rawMagnetDataY = magnetometerData.magneticField.y
@@ -1010,13 +967,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         // create each GPS/IMU sensor text files
         let now = Date()
-
+        
         let date = DateFormatter()
         date.locale = Locale(identifier: "ko_kr")
         date.timeZone = TimeZone(abbreviation: "KST") // "2018-03-21 18:07:27"
         //date.timeZone = TimeZone(abbreviation: "NZST") // "2018-03-21 22:06:39"
         date.dateFormat = "yyyyMMdd HHmmss"
-
+        
         let krs = date.string(from: now)
         
         let startHeader = ""
@@ -1025,15 +982,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             url.appendPathComponent(krs+UIDevice.current.name+fileNames[i])
             self.fileURLs.append(url)
             
-//            // delete previous text files
-//            if (FileManager.default.fileExists(atPath: url.path)) {
-//                do {
-//                    try FileManager.default.removeItem(at: url)
-//                } catch {
-//                    os_log("cannot remove previous file", log:.default, type:.error)
-//                    return false
-//                }
-//            }
+            //            // delete previous text files
+            //            if (FileManager.default.fileExists(atPath: url.path)) {
+            //                do {
+            //                    try FileManager.default.removeItem(at: url)
+            //                } catch {
+            //                    os_log("cannot remove previous file", log:.default, type:.error)
+            //                    return false
+            //                }
+            //            }
             
             // create new text files
             if (!FileManager.default.createFile(atPath: url.path, contents: startHeader.data(using: String.Encoding.utf8), attributes: nil)) {
@@ -1049,23 +1006,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 return false
             }
         }
-//                                   "gyro.txt",
-//                                   "gyro_uncalib.txt",
-//                                   "acce.txt",
-//                                   "linacce.txt",
-//                                   "gravity.txt",
-//                                   "magnet.txt",
-//                                   "magnet_uncalib.txt",
-//                                   "game_rv.txt",
-//                                   "gps.txt",
-//                                   "step.txt",
-//                                   "heading.txt",
-//                                   "height.txt",
-//                                   "pressure.txt",
-//                                   "battery.txt",
-//                                   "airpot.txt",
-//                                   "watch.text"
-//
+        //                                   "gyro.txt",
+        //                                   "gyro_uncalib.txt",
+        //                                   "acce.txt",
+        //                                   "linacce.txt",
+        //                                   "gravity.txt",
+        //                                   "magnet.txt",
+        //                                   "magnet_uncalib.txt",
+        //                                   "game_rv.txt",
+        //                                   "gps.txt",
+        //                                   "step.txt",
+        //                                   "heading.txt",
+        //                                   "height.txt",
+        //                                   "pressure.txt",
+        //                                   "battery.txt",
+        //                                   "airpot.txt",
+        //                                   "watch.text"
+        //
         // write current recording time information
         let timeHeader = ["timestamp,gyro.x,gyro.y,gyro.z\n",
                           "timestamp,unclib_gyro.x,unclib_gyro.y,unclib_gyro.z\n",
@@ -1114,7 +1071,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         
         return String(format: "%02d:%02d:%02d", hours, mins, secs)
     }
-
+    
     func timeToString() -> String {
         let date = Date()
         let calendar = Calendar.current
@@ -1126,5 +1083,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         let sec = calendar.component(.second, from: date)
         return String(format:"%04d-%02d-%02d %02d:%02d:%02d in PDT", year, month, day, hour, minute, sec)
     }
-
+    
+    func watchDataSend()
+    {
+        ViewController.watch_SendStart = true
+    }
+    
 }
