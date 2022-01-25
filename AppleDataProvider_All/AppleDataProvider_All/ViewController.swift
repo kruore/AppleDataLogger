@@ -196,7 +196,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     let DeviceInfo = UIDevice.current.name
     
     let now = Date()
-    let tcpmanager = TCPClient(hostName: "192.168.1.2", port: 4545)
+   // let tcpmanager = TCPClient(hostName: "192.168.1.78", port: 4646)
     
     var fileNames: [String] = ["gyro.txt",
                                "gyro_uncalib.txt",
@@ -290,7 +290,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         UIApplication.shared.isIdleTimerDisabled = true
                     }
                     self.isRecording = true
-                    self.tcpmanager.start()
+//                    self.tcpmanager.start()
                 } else {
                     self.errorMsg(msg: "Failed to create the file")
                     return
@@ -345,7 +345,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             
             self.startStopButton.setTitle("Start", for: .normal)
             self.statusLabel.text = "Ready"
-            tcpmanager.stop()
+           // tcpmanager.stop()
             // resume screen lock
             UIApplication.shared.isIdleTimerDisabled = false
         }
@@ -418,7 +418,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
                     if let locationDataToWrite = watchData.data(using: .utf8) {
                         self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
-                        self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
+                     //   self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
                     } else {
                         os_log("Failed to write data record", log: OSLog.default, type: .fault)
                     }
@@ -494,7 +494,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 let airpotTime = String(format: "%0.f", self.timestamp)
                 if let locationDataToWrite = airpotData.data(using: .utf8) {
                     self.fileHandlers[self.AIRPOT_TXT].write(locationDataToWrite)
-                    self.tcpmanager.send(line: "AIRPOT,\(airpotTime),4,\(airpotData);")
+                 //   self.tcpmanager.send(line: "AIRPOT,\(airpotTime),4,\(airpotData);")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
