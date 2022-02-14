@@ -11,7 +11,7 @@ import CoreMotion
 import os.log
 import WatchConnectivity
 import HealthKit
-
+import AudioToolbox
 
 class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMotionManagerDelegate, WCSessionDelegate {
     
@@ -147,6 +147,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     
     @IBOutlet weak var heartrate: UILabel!
     
+    @IBOutlet weak var serverstate: UILabel!
     // constants for collecting data
     let numSensor = 16
     let GYRO_TXT = 0
@@ -396,6 +397,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         {
             let seperator = seperatorArray[i].components(separatedBy: ",")
             print(seperator[1])
+            switch self.tcpmanager.connection.state
+            {
+            case .cancelled:
+                self.serverstate.text="cancelled"
+                print(self.tcpmanager.connection.state)
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            case .failed:
+                self.serverstate.text="faild"
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                print(self.tcpmanager.connection.state)
+            case .ready:
+                self.serverstate.text="ready"
+                print(self.tcpmanager.connection.state)
+            case .preparing:
+                self.serverstate.text="preparing"
+                print(self.tcpmanager.connection.state)
+            case .waiting:
+                self.serverstate.text="waiting"
+                print(self.tcpmanager.connection.state)
+            case.setup:
+                self.serverstate.text="setup"
+                print(self.tcpmanager.connection.state)
+            @unknown default:
+                self.serverstate.text="unknown"
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                print(self.tcpmanager.connection.state)
+            }
             DispatchQueue.main.async
             {
                 self.watchGyrox.text = seperator[1]
@@ -419,6 +447,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     if let locationDataToWrite = watchData.data(using: .utf8) {
                         self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
                         self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
+                      
+                        
                     } else {
                         os_log("Failed to write data record", log: OSLog.default, type: .fault)
                     }
@@ -471,7 +501,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccx.text = String(format : "%.3f",data.userAcceleration.x)
         self.airpotAccy.text = String(format : "%.3f",data.userAcceleration.y)
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
-        
+        switch self.tcpmanager.connection.state
+        {
+        case .cancelled:
+            self.serverstate.text="cancelled"
+            print(self.tcpmanager.connection.state)
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        case .failed:
+            self.serverstate.text="faild"
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            print(self.tcpmanager.connection.state)
+        case .ready:
+            self.serverstate.text="ready"
+            print(self.tcpmanager.connection.state)
+        case .preparing:
+            self.serverstate.text="preparing"
+            print(self.tcpmanager.connection.state)
+        case .waiting:
+            self.serverstate.text="waiting"
+            print(self.tcpmanager.connection.state)
+        case.setup:
+            self.serverstate.text="setup"
+            print(self.tcpmanager.connection.state)
+        @unknown default:
+            self.serverstate.text="unknown"
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            print(self.tcpmanager.connection.state)
+        }
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
         
         // custom queue to save GPS location data
