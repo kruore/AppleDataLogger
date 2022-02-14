@@ -190,6 +190,7 @@ class InterfaceController: WKInterfaceController,WCSessionDelegate {
                     if(self.i==5)
                     {
                         self.session.sendMessage(["watch":self.buffer as String], replyHandler: nil,errorHandler: nil)
+                        print("send?")
                         self.buffer = ""
                         self.i=0
                     }

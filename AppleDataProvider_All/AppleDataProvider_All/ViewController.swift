@@ -197,7 +197,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
     let DeviceInfo = UIDevice.current.name
     
     let now = Date()
-    let tcpmanager = TCPClient(hostName: "192.168.1.2", port: 4545)
+   // let tcpmanager = TCPClient(hostName: "192.168.1.2", port: 4545)/
     
     var fileNames: [String] = ["gyro.txt",
                                "gyro_uncalib.txt",
@@ -291,7 +291,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                         UIApplication.shared.isIdleTimerDisabled = true
                     }
                     self.isRecording = true
-                    self.tcpmanager.start()
+                    self.watchDataSend()
+//                    self.tcpmanager.start()
                 } else {
                     self.errorMsg(msg: "Failed to create the file")
                     return
@@ -346,7 +347,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
             
             self.startStopButton.setTitle("Start", for: .normal)
             self.statusLabel.text = "Ready"
-            tcpmanager.stop()
+         //   tcpmanager.stop()
             // resume screen lock
             UIApplication.shared.isIdleTimerDisabled = false
         }
@@ -407,37 +408,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 self.watchAccy.text = seperator[5]
                 self.watchAccz.text = seperator[6]
                 self.heartrate.text = seperator[7]
-                print(self.vectorvalue)
-                switch self.tcpmanager.connection.state
-                {
-                case .cancelled:
-                    self.serverstate.text="cancelled"
-                    print(self.tcpmanager.connection.state)
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                case .failed:
-                    self.serverstate.text="faild"
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                    print(self.tcpmanager.connection.state)
-                case .ready:
-                    self.serverstate.text="ready"
-                    print(self.tcpmanager.connection.state)
-                case .preparing:
-                    self.serverstate.text="preparing"
-                    print(self.tcpmanager.connection.state)
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                case .waiting:
-                    self.serverstate.text="waiting"
-                    print(self.tcpmanager.connection.state)
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                case.setup:
-                    self.serverstate.text="setup"
-                    print(self.tcpmanager.connection.state)
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                @unknown default:
-                    self.serverstate.text="unknown"
-                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                    print(self.tcpmanager.connection.state)
-                }
+//                switch self.tcpmanager.connection.state
+//                {
+//                case .cancelled:
+//                    self.serverstate.text="cancelled"
+//                    print(self.tcpmanager.connection.state)
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                case .failed:
+//                    self.serverstate.text="faild"
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                    print(self.tcpmanager.connection.state)
+//                case .ready:
+//                    self.serverstate.text="ready"
+//                    print(self.tcpmanager.connection.state)
+//                case .preparing:
+//                    self.serverstate.text="preparing"
+//                    print(self.tcpmanager.connection.state)
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                case .waiting:
+//                    self.serverstate.text="waiting"
+//                    print(self.tcpmanager.connection.state)
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                case.setup:
+//                    self.serverstate.text="setup"
+//                    print(self.tcpmanager.connection.state)
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                @unknown default:
+//                    self.serverstate.text="unknown"
+//                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//                    print(self.tcpmanager.connection.state)
+//                }
             }
             // custom queue to save GPS location data
             self.customQueue.async {
@@ -447,10 +447,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                     let timeS = String(format: "%.0f",timestamp)
                     
                     
-                    let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])")
+                    let watchData = ("\(seperator[0])^\(seperator[1])^\(seperator[2])^\(seperator[3])^\(seperator[4])^\(seperator[5])^\(seperator[6])^\(seperator[7])\n")
                     if let locationDataToWrite = watchData.data(using: .utf8) {
                         self.fileHandlers[self.WATCH_TXT].write(locationDataToWrite)
-                        self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
+                       // self.tcpmanager.send(line: "WATCH,\(timeS),4,\(watchData);")
                       
                         
                     } else {
@@ -505,33 +505,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         self.airpotAccx.text = String(format : "%.3f",data.userAcceleration.x)
         self.airpotAccy.text = String(format : "%.3f",data.userAcceleration.y)
         self.airpotAccz.text = String(format : "%.3f",data.userAcceleration.z)
-        switch self.tcpmanager.connection.state
-        {
-        case .cancelled:
-            self.serverstate.text="cancelled"
-            print(self.tcpmanager.connection.state)
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-        case .failed:
-            self.serverstate.text="faild"
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            print(self.tcpmanager.connection.state)
-        case .ready:
-            self.serverstate.text="ready"
-            print(self.tcpmanager.connection.state)
-        case .preparing:
-            self.serverstate.text="preparing"
-            print(self.tcpmanager.connection.state)
-        case .waiting:
-            self.serverstate.text="waiting"
-            print(self.tcpmanager.connection.state)
-        case.setup:
-            self.serverstate.text="setup"
-            print(self.tcpmanager.connection.state)
-        @unknown default:
-            self.serverstate.text="unknown"
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            print(self.tcpmanager.connection.state)
-        }
+//        switch self.tcpmanager.connection.state
+//        {
+//        case .cancelled:
+//            self.serverstate.text="cancelled"
+//            print(self.tcpmanager.connection.state)
+//            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//        case .failed:
+//            self.serverstate.text="faild"
+//            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//            print(self.tcpmanager.connection.state)
+//        case .ready:
+//            self.serverstate.text="ready"
+//            print(self.tcpmanager.connection.state)
+//        case .preparing:
+//            self.serverstate.text="preparing"
+//            print(self.tcpmanager.connection.state)
+//        case .waiting:
+//            self.serverstate.text="waiting"
+//            print(self.tcpmanager.connection.state)
+//        case.setup:
+//            self.serverstate.text="setup"
+//            print(self.tcpmanager.connection.state)
+//        @unknown default:
+//            self.serverstate.text="unknown"
+//            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//            print(self.tcpmanager.connection.state)
+//        }
         //self.string = formatter.string(from: currentdatetime)+","+strings_x+","+strings_y+","+strings_z+";\n"
         
         // custom queue to save GPS location data
@@ -554,7 +554,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 let airpotTime = String(format: "%0.f", self.timestamp)
                 if let locationDataToWrite = airpotData.data(using: .utf8) {
                     self.fileHandlers[self.AIRPOT_TXT].write(locationDataToWrite)
-                    self.tcpmanager.send(line: "AIRPOT,\(airpotTime),4,\(airpotData);")
+                  //  self.tcpmanager.send(line: "AIRPOT,\(airpotTime),4,\(airpotData);")
                 } else {
                     os_log("Failed to write data record", log: OSLog.default, type: .fault)
                 }
