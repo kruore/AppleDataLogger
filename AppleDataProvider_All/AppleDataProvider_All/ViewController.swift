@@ -541,7 +541,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 // if let locationData = dataCategory.data(using: .utf8) {
                 //self.fileHandlers[self.WATCH_TXT].write(locationData)
                 
-                let airpotData = String(format: "%.0f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f",
+                let airpotData = String(format: "%.0f^%.3f^%.3f^%.3f^%.3f^%.3f^%.3f\n",
                                         self.timestamp,
                                         data.gravity.x,
                                         data.gravity.y,
