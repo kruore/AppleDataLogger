@@ -514,6 +514,13 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="DataSend"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G7j-aF-WX1" userLabel="ServerstateLabel">
+                                <rect key="frame" x="35" y="594" width="289" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -542,6 +549,7 @@
                         <outlet property="rxLabel" destination="o2p-go-Vut" id="MAg-Nw-paO"/>
                         <outlet property="ryLabel" destination="k2I-tV-UnW" id="x8q-7z-kdd"/>
                         <outlet property="rzLabel" destination="euI-4C-uVE" id="1s5-08-pVp"/>
+                        <outlet property="serverstate" destination="G7j-aF-WX1" id="sLt-vr-iKg"/>
                         <outlet property="startStopButton" destination="Me8-yE-LmA" id="M07-z3-jD7"/>
                         <outlet property="statusLabel" destination="eTp-no-2xL" id="e3p-LN-izW"/>
                         <outlet property="stepCount" destination="jly-5h-kSd" id="E2y-Vq-dCw"/>
