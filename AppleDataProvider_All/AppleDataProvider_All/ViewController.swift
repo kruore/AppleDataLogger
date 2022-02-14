@@ -397,33 +397,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
         {
             let seperator = seperatorArray[i].components(separatedBy: ",")
             print(seperator[1])
-            switch self.tcpmanager.connection.state
-            {
-            case .cancelled:
-                self.serverstate.text="cancelled"
-                print(self.tcpmanager.connection.state)
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            case .failed:
-                self.serverstate.text="faild"
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                print(self.tcpmanager.connection.state)
-            case .ready:
-                self.serverstate.text="ready"
-                print(self.tcpmanager.connection.state)
-            case .preparing:
-                self.serverstate.text="preparing"
-                print(self.tcpmanager.connection.state)
-            case .waiting:
-                self.serverstate.text="waiting"
-                print(self.tcpmanager.connection.state)
-            case.setup:
-                self.serverstate.text="setup"
-                print(self.tcpmanager.connection.state)
-            @unknown default:
-                self.serverstate.text="unknown"
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                print(self.tcpmanager.connection.state)
-            }
+            
             DispatchQueue.main.async
             {
                 self.watchGyrox.text = seperator[1]
@@ -434,6 +408,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CMHeadphoneMo
                 self.watchAccz.text = seperator[6]
                 self.heartrate.text = seperator[7]
                 print(self.vectorvalue)
+                switch self.tcpmanager.connection.state
+                {
+                case .cancelled:
+                    self.serverstate.text="cancelled"
+                    print(self.tcpmanager.connection.state)
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                case .failed:
+                    self.serverstate.text="faild"
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                    print(self.tcpmanager.connection.state)
+                case .ready:
+                    self.serverstate.text="ready"
+                    print(self.tcpmanager.connection.state)
+                case .preparing:
+                    self.serverstate.text="preparing"
+                    print(self.tcpmanager.connection.state)
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                case .waiting:
+                    self.serverstate.text="waiting"
+                    print(self.tcpmanager.connection.state)
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                case.setup:
+                    self.serverstate.text="setup"
+                    print(self.tcpmanager.connection.state)
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                @unknown default:
+                    self.serverstate.text="unknown"
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                    print(self.tcpmanager.connection.state)
+                }
             }
             // custom queue to save GPS location data
             self.customQueue.async {
